@@ -116,7 +116,7 @@ const taskIncomplete = function () {
 
 const ajaxRequest = function () {}
 
-//The glue to hold it all together.
+//The glue to hold it all together
 
 //Set the click handler to the addTask function.
 addButton.onclick = addTask
