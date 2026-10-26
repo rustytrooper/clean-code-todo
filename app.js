@@ -3,39 +3,34 @@ const addButton = document.getElementsByTagName('button')[0]
 const incompleteTaskList = document.getElementById('incomplete-tasks')
 const completedTaskList = document.getElementById('completed-tasks')
 
+const createElement = (tag, props = {}) => {
+    const el = document.createElement(tag)
+    Object.assign(el, props)
+    return el
+}
+
 const createTaskListItem = function (taskString) {
     const listItem = document.createElement('li')
 
-    const checkBox = document.createElement('input')
+    const checkBox = createElement('input', { type: 'checkbox' })
+    const label = createElement('label', {
+        className: 'task',
+        innerText: taskString,
+    })
+    const editInput = createElement('input', {
+        type: 'text',
+        className: 'task',
+    })
+    const editButton = createElement('button', {
+        className: 'edit',
+        innerText: 'Edit',
+    }) //innerText encodes special characters, HTML does not.
+    const deleteButton = createElement('button', { className: 'delete' })
+    const deleteButtonImg = createElement('img', { src: './remove.svg' })
 
-    const label = document.createElement('label')
-
-    const editInput = document.createElement('input')
-
-    const editButton = document.createElement('button')
-
-    const deleteButton = document.createElement('button')
-    const deleteButtonImg = document.createElement('img')
-
-    label.innerText = taskString
-    label.className = 'task'
-
-    checkBox.type = 'checkbox'
-    editInput.type = 'text'
-    editInput.className = 'task'
-
-    editButton.innerText = 'Edit' //innerText encodes special characters, HTML does not.
-    editButton.className = 'edit'
-
-    deleteButton.className = 'delete'
-    deleteButtonImg.src = './remove.svg'
     deleteButton.appendChild(deleteButtonImg)
 
-    listItem.appendChild(checkBox)
-    listItem.appendChild(label)
-    listItem.appendChild(editInput)
-    listItem.appendChild(editButton)
-    listItem.appendChild(deleteButton)
+    listItem.append(checkBox, label, editInput, editButton, deleteButton)
     return listItem
 }
 
