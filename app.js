@@ -9,11 +9,11 @@
 
 const taskInput = document.getElementById('new-task') //Add a new task.
 const addButton = document.getElementsByTagName('button')[0] //first button
-const incompleteTaskHolder = document.getElementById('incompleteTasks') //ul of #incompleteTasks
-const completedTasksHolder = document.getElementById('completed-tasks') //completed-tasks
+const incompleteTaskList = document.getElementById('incompleteTasks') //ul of #incompleteTasks
+const completedTaskList = document.getElementById('completed-tasks') //completed-tasks
 
 //New task list item
-const createNewTaskElement = function (taskString) {
+const createTaskListItem = function (taskString) {
     const listItem = document.createElement('li')
 
     //input (checkbox)
@@ -56,18 +56,18 @@ const createNewTaskElement = function (taskString) {
 const addTask = function () {
     //Create a new list item with the text from the #new-task:
     if (!taskInput.value) return
-    const listItem = createNewTaskElement(taskInput.value)
+    const listItem = createTaskListItem(taskInput.value)
 
-    //Append listItem to incompleteTaskHolder
-    incompleteTaskHolder.appendChild(listItem)
-    bindTaskEvents(listItem, taskCompleted)
+    //Append listItem to incompleteTaskList
+    incompleteTaskList.appendChild(listItem)
+    bindTaskEvents(listItem, moveTaskToCompleted)
 
     taskInput.value = ''
 }
 
 //Edit an existing task.
 
-const editTask = function () {
+const toggleTaskEditMode = function () {
     const listItem = this.parentNode
 
     const editInput = listItem.querySelector('input[type=text]')
@@ -98,26 +98,26 @@ const deleteTask = function () {
 }
 
 //Mark task completed
-const taskCompleted = function () {
+const moveTaskToCompleted = function () {
     //Append the task list item to the #completed-tasks
     const listItem = this.parentNode
-    completedTasksHolder.appendChild(listItem)
-    bindTaskEvents(listItem, taskIncomplete)
+    completedTaskList.appendChild(listItem)
+    bindTaskEvents(listItem, moveTaskToIncomplete)
 }
 
-const taskIncomplete = function () {
+const moveTaskToIncomplete = function () {
     //Mark task as incomplete.
     //When the checkbox is unchecked
     //Append the task list item to the #incompleteTasks.
     const listItem = this.parentNode
-    incompleteTaskHolder.appendChild(listItem)
-    bindTaskEvents(listItem, taskCompleted)
+    incompleteTaskList.appendChild(listItem)
+    bindTaskEvents(listItem, moveTaskToCompleted)
 }
 
 //The glue to hold it all together
 
 //Set the click handler to the addTask function.
-addButton.onclick = addTask
+//
 addButton.addEventListener('click', addTask)
 
 const bindTaskEvents = function (taskListItem, checkBoxEventHandler) {
@@ -126,25 +126,25 @@ const bindTaskEvents = function (taskListItem, checkBoxEventHandler) {
     const editButton = taskListItem.querySelector('button.edit')
     const deleteButton = taskListItem.querySelector('button.delete')
 
-    //Bind editTask to edit button.
-    editButton.onclick = editTask
+    //Bind toggleTaskEditMode to edit button.
+    editButton.onclick = toggleTaskEditMode
     //Bind deleteTask to delete button.
     deleteButton.onclick = deleteTask
-    //Bind taskCompleted to checkBoxEventHandler.
+    //Bind moveTaskToCompleted to checkBoxEventHandler.
     checkBox.onchange = checkBoxEventHandler
 }
 
-//cycle over incompleteTaskHolder ul list items
+//cycle over incompleteTaskList ul list items
 //for each list item
-for (let i = 0; i < incompleteTaskHolder.children.length; i++) {
+for (let i = 0; i < incompleteTaskList.children.length; i++) {
     //bind events to list items chldren(tasksCompleted)
-    bindTaskEvents(incompleteTaskHolder.children[i], taskCompleted)
+    bindTaskEvents(incompleteTaskList.children[i], moveTaskToCompleted)
 }
 
-//cycle over completedTasksHolder ul list items
-for (let i = 0; i < completedTasksHolder.children.length; i++) {
+//cycle over completedTaskList ul list items
+for (let i = 0; i < completedTaskList.children.length; i++) {
     //bind events to list items chldren(tasksIncompleted)
-    bindTaskEvents(completedTasksHolder.children[i], taskIncomplete)
+    bindTaskEvents(completedTaskList.children[i], moveTaskToIncomplete)
 }
 
 // Issues with usability don't get seen until they are in front of a human tester.
